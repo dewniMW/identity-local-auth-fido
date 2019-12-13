@@ -24,7 +24,7 @@
         <groupId>org.wso2.carbon.identity.local.auth.fido</groupId>
         <artifactId>identity-application-auth-fido</artifactId>
         <relativePath>../../pom.xml</relativePath>
-        <version>5.1.21-SNAPSHOT</version>
+        <version>5.1.25-SNAPSHOT</version>
     </parent>
 
     <packaging>war</packaging>
@@ -33,21 +33,19 @@
 
     <build>
         <plugins>
-
-            <plugin>
+            <!-- Plugin for generating the swagger server stubs-->
+            <!--<plugin>
                 <groupId>org.wso2.maven.plugins</groupId>
                 <artifactId>swagger2cxf-maven-plugin</artifactId>
                 <version>1.0-SNAPSHOT</version>
                 <configuration>
                     <inputSpec>${project.basedir}/src/main/resources/fido.yaml</inputSpec>
                 </configuration>
-            </plugin>
-
+            </plugin>-->
 
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
-                <version>1.8</version>
                 <executions>
                     <execution>
                         <id>add-source</id>
@@ -68,7 +66,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
-                <version>${maven.war.plugin.version}</version>
                 <configuration>
                     <webResources>
                         <resource>
@@ -76,15 +73,15 @@
                             <directory>src/main/webapp</directory>
                         </resource>
                     </webResources>
-                    <warName>api#users#v1#me#webauthn</warName>
+                    <warName>api#users#v2#me#webauthn</warName>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>8</source>
-                    <target>8</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
             </plugin>
         </plugins>
@@ -94,13 +91,11 @@
         <dependency>
             <groupId>org.wso2.carbon.identity.local.auth.fido</groupId>
             <artifactId>org.wso2.carbon.identity.application.authenticator.fido2</artifactId>
-            <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
-            <version>${springframework.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -150,26 +145,27 @@
         <dependency>
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-rt-frontend-jaxrs</artifactId>
-            <version>${org.apache.cxf.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-rt-rs-service-description</artifactId>
-            <version>${org.apache.cxf.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.jaxrs</groupId>
             <artifactId>jackson-jaxrs-json-provider</artifactId>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.dataformat</groupId>
             <artifactId>jackson-dataformat-xml</artifactId>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 

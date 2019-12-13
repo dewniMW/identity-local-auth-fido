@@ -25,11 +25,11 @@ public class StartRegistrationApi  {
 
    private final StartRegistrationApiService delegate = StartRegistrationApiServiceFactory.getStartRegistrationApi();
 
-    @GET
+    @POST
     
     @Consumes({ "application/x-www-form-urlencoded" })
     @Produces({ "application/json" })
-    @io.swagger.annotations.ApiOperation(value = "Trigger FIDO2 device registration\n", notes = "This API is used to trigger FIDO2 device registration flow.\n\n <b>Permission required:</b>\n * /permission/admin/login\n", response = String.class)
+    @io.swagger.annotations.ApiOperation(value = "Trigger FIDO2 device registration.\n", notes = "This API is used to trigger FIDO2 device registration flow.\n\n <b>Permission required:</b>\n * /permission/admin/login\n", response = Object.class)
     @io.swagger.annotations.ApiResponses(value = { 
         @io.swagger.annotations.ApiResponse(code = 201, message = "Successful response"),
         
@@ -37,13 +37,15 @@ public class StartRegistrationApi  {
         
         @io.swagger.annotations.ApiResponse(code = 401, message = "Unauthorized"),
         
+        @io.swagger.annotations.ApiResponse(code = 403, message = "Resource Forbidden"),
+        
         @io.swagger.annotations.ApiResponse(code = 409, message = "Conflict"),
         
         @io.swagger.annotations.ApiResponse(code = 500, message = "Server Error") })
 
-    public Response startRegistrationGet(@ApiParam(value = "This represents the host name of FIDO request initiator",required=true) @QueryParam("appId")  String appId)
+    public Response startRegistrationPost(@ApiParam(value = "Represents the host name of FIDO request initiator.", required=true )@Multipart(value = "appId")  String appId)
     {
-    return delegate.startRegistrationGet(appId);
+    return delegate.startRegistrationPost(appId);
     }
 }
 

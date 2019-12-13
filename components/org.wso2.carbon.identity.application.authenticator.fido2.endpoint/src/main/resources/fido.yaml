@@ -3,7 +3,7 @@ swagger: '2.0'
 # Prolog
 ######################################################
 info:
-  version: "v1"
+  version: "v2"
   title: "WSO2 Identity Server FIDO2 Rest API "
   description: |
     This document specifies a **FIDO 2 RESTfulAPI** for WSO2 **Identity Server** .
@@ -39,7 +39,7 @@ schemes:
 # The base path of the API.
 # Will be prefixed to all paths.
 
-basePath: /t/{tenant_context}/api/users/v1/me/webauthn
+basePath: /t/{tenant_context}/api/users/v2/me/webauthn
 
 # The following media types can be passed as input in message bodies of the API.
 # The actual media type must be specified in the Content-Type header field of the request.
@@ -64,59 +64,56 @@ security:
 paths:
   # Endpoint used to start registration
   /start-registration:
-    get:
+    post:
       description: |
         This API is used to trigger FIDO2 device registration flow.
 
          <b>Permission required:</b>
          * /permission/admin/login
       summary: |
-        Trigger FIDO2 device registration
+        Trigger FIDO2 device registration.
       consumes:
         - application/x-www-form-urlencoded
       # post parameters:
       parameters:
         -
           name: appId
-          in: query
-          description:  This represents the host name of FIDO request initiator
+          in: formData
+          description:  Represents the host name of FIDO request initiator.
           required: true
           type: string
       responses:
         201:
           description: Successful response
           schema:
-            type: string
+            type: object
             example:
-              application/json:
-                username: admin@carbon.super
-                requestId: veiLaU2yg0-pAhn1sRlXZBbxS5KaidyAyfWt-sQUajU
-                publicKeyCredentialCreationOptions:
-                  rp:
-                    name: WSO2 Identity Server
-                    id: localhost
-                  user:
-                    name: admin@carbon.super
-                    displayName: admin
-                    id: iAgKlKucOIjxUoUq510BXTI9_p3NENmQo2ZM5gQMcoA
-                  challenge: tvyJuz16drO390L5VPheOG5zpY9zEcSVbc1QNeFv0Fs
-                  pubKeyCredParams:
-                    - alg: -7
-                      type: public-key
-                    - alg: -257
-                      type: public-key
-                  excludeCredentials: []
-                  attestation: none
-                  extensions: {}
-
+              requestId: veiLaU2yg0-pAhn1sRlXZBbxS5KaidyAyfWt-sQUajU
+              publicKeyCredentialCreationOptions:
+                rp:
+                  name: WSO2 Identity Server
+                  id: localhost
+                user:
+                  name: admin@carbon.super
+                  displayName: admin
+                  id: iAgKlKucOIjxUoUq510BXTI9_p3NENmQo2ZM5gQMcoA
+                challenge: tvyJuz16drO390L5VPheOG5zpY9zEcSVbc1QNeFv0Fs
+                pubKeyCredParams:
+                  - alg: -7
+                    type: public-key
+                  - alg: -257
+                    type: public-key
+                excludeCredentials: []
+                attestation: none
+                extensions: {}
         400:
           description: Bad Request
           schema:
             $ref: '#/definitions/Error'
         401:
           description: Unauthorized
-          schema:
-            $ref: '#/definitions/Error'
+        403:
+          description: Resource Forbidden
         409:
           description: Conflict
           schema:
@@ -127,6 +124,7 @@ paths:
             $ref: '#/definitions/Error'
       tags:
         - me
+
   /finish-registration:
     post:
       description: |
@@ -135,29 +133,40 @@ paths:
         <b>Permission required:</b>
          * /permission/admin/login
       summary: |
-        Complete FIDO2 device registration
+        Complete FIDO2 device registration.
       # post parameters:
       parameters:
         -
-          name: response
+          name: challengeResponse
           in: body
-          description:  Response from the client
+          description:  Response from the client.
           required: true
           schema:
             type: string
+            example:
+              { "requestId":"GzNnMTGdZjfS80BbYmGnXuJBwAV2Qbwb0vws47DCYLk", "credential":{ "id":"CnLte9JzbTY_NDpGatGAAGD2VfTQHJD8COjAU3w", "response":{ "attestationObject": "o2b2uUzV0ifaiSsnIPVh3FGSgELyCQJIMIICRDC", "clientDataJSON": "eyJjaGFsbGVuZ2UiOiJUZ0pfdXVra3FuUG1C"},"clientExtensionResults":{},"type":"public-key"} }
       responses:
         201:
-          description: Device registered successfully
+          description: Device registered successfully.
           schema:
-            type: string
+            type: object
+            example:
+              requestId: GzNnMTGdZjfS80BbYmGnXuJBwAV2Qbwb0vws47DCYLk
+              credential:
+                id: CnLte9JzbTY_NDpGatGAAGD2VfTQHJD8COjAU3w
+                response:
+                  attestationObject: o2b2uUzV0ifaiSsnIPVh3FGSgELyCQJIMIICRDC
+                  clientDataJSON: eyJjaGFsbGVuZ2UiOiJUZ0pfdXVra3FuUG1C
+                clientExtensionResults: {}
+                type: public-key
         400:
           description: Bad Request
           schema:
             $ref: '#/definitions/Error'
         401:
           description: Unauthorized
-          schema:
-            $ref: '#/definitions/Error'
+        403:
+          description: Resource Forbidden
         409:
           description: Conflict
           schema:
@@ -168,6 +177,7 @@ paths:
             $ref: '#/definitions/Error'
       tags:
         - me
+
   /{credentialId}:
     delete:
       description: |
@@ -176,7 +186,7 @@ paths:
         <b>Permission required:</b>
          * /permission/admin/login
       summary: |
-        Deregister devices by username and credentialId
+        Deregister devices by username and credentialId.
       parameters:
         -
           name: credentialId
@@ -185,8 +195,8 @@ paths:
           required: true
           type: string
       responses:
-        200:
-          description: OK
+        204:
+          description: No Content
         404:
           description: Not Found
           schema:
@@ -197,14 +207,15 @@ paths:
             $ref: '#/definitions/Error'
         401:
           description: Unauthorized
-          schema:
-            $ref: '#/definitions/Error'
+        403:
+          description: Resource Forbidden
         500:
           description: Server Error
           schema:
             $ref: '#/definitions/Error'
       tags:
         - me
+
   # Endpoint used to get device metadata by username
   /:
     get:
@@ -215,32 +226,33 @@ paths:
          * /permission/admin/login
       summary: |
         Device Metadata
-      consumes:
-        - application/x-www-form-urlencoded
-      parameters:
-        -
-          name: username
-          in: query
-          description:  This represents the username
-          required: true
-          type: string
       responses:
-        201:
-          description: Successful response
+        200:
+          description: All available fido metadata for a user.
           schema:
-            type: string
+            type: array
+            items:
+              type: object
+              example:
+                signatureCount: 0
+                userIdentity:
+                  name: admin@carbon.super
+                  displayName: admin
+                  id: uq99g9NLogr-k3OC6i1UDhmfeiZeKbygGPBcKoq96UI
+                credential:
+                  credentialId: S2_HP9mz3wt0_XFrF4QEqcCOn-mblJ2e6YBX79MqU3cwEH-7UXd0oxn0-QKpB4HsRpe3jerAyT233hKdq3vfrQ
+                  userHandle: uq99g9NLogr-k3OC6i1UDhmfeiZeKbygGPBcKoq96UI
+                  publicKeyCose: pSJYIDbPBKVOQWaZAraIPfggBxVHVGuYPROvWR5WigNbh5iiAyYBAiFYIIbF8aqhhWrQYbQnQJY7WrjiQD84qvQulLfGjbUgk1yAIAE
+                  signatureCount: 0
+                registrationTime: "2019-11-26T05:16:19.932Z"
         400:
           description: Bad Request
           schema:
             $ref: '#/definitions/Error'
         401:
           description: Unauthorized
-          schema:
-            $ref: '#/definitions/Error'
-        409:
-          description: Conflict
-          schema:
-            $ref: '#/definitions/Error'
+        403:
+          description: Resource Forbidden
         500:
           description: Server Error
           schema:
@@ -257,10 +269,14 @@ definitions:
     properties:
       code:
         type: string
+        example: "some_error_code"
       message:
         type: string
+        example: "Some Error Message"
       description:
         type: string
+        example: "Some Error Description"
+
 #-----------------------------------------------------
 securityDefinitions:
   BasicAuth:

@@ -29,21 +29,23 @@ public class FinishRegistrationApi  {
     
     @Consumes({ "application/json" })
     @Produces({ "application/json" })
-    @io.swagger.annotations.ApiOperation(value = "Complete FIDO2 device registration\n", notes = "This API is used to complete FIDO2 device registration flow.\n\n<b>Permission required:</b>\n * /permission/admin/login\n", response = String.class)
+    @io.swagger.annotations.ApiOperation(value = "Complete FIDO2 device registration.\n", notes = "This API is used to complete FIDO2 device registration flow.\n\n<b>Permission required:</b>\n * /permission/admin/login\n", response = Object.class)
     @io.swagger.annotations.ApiResponses(value = { 
-        @io.swagger.annotations.ApiResponse(code = 201, message = "Device registered successfully"),
+        @io.swagger.annotations.ApiResponse(code = 201, message = "Device registered successfully."),
         
         @io.swagger.annotations.ApiResponse(code = 400, message = "Bad Request"),
         
         @io.swagger.annotations.ApiResponse(code = 401, message = "Unauthorized"),
         
+        @io.swagger.annotations.ApiResponse(code = 403, message = "Resource Forbidden"),
+        
         @io.swagger.annotations.ApiResponse(code = 409, message = "Conflict"),
         
         @io.swagger.annotations.ApiResponse(code = 500, message = "Server Error") })
 
-    public Response finishRegistrationPost(@ApiParam(value = "Response from the client" ,required=true ) String response)
+    public Response finishRegistrationPost(@ApiParam(value = "Response from the client." ,required=true ) String challengeResponse)
     {
-    return delegate.finishRegistrationPost(response);
+    return delegate.finishRegistrationPost(challengeResponse);
     }
 }
 

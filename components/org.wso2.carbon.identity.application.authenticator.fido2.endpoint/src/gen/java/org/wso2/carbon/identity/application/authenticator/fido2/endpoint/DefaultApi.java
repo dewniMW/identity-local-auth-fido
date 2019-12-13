@@ -27,23 +27,23 @@ public class DefaultApi  {
 
     @GET
     
-    @Consumes({ "application/x-www-form-urlencoded" })
+    @Consumes({ "application/json" })
     @Produces({ "application/json" })
-    @io.swagger.annotations.ApiOperation(value = "Device Metadata\n", notes = "This API is used to get fido metadata by username.\n\n<b>Permission required:</b>\n * /permission/admin/login\n", response = String.class)
+    @io.swagger.annotations.ApiOperation(value = "Device Metadata\n", notes = "This API is used to get fido metadata by username.\n\n<b>Permission required:</b>\n * /permission/admin/login\n", response = Object.class, responseContainer = "List")
     @io.swagger.annotations.ApiResponses(value = { 
-        @io.swagger.annotations.ApiResponse(code = 201, message = "Successful response"),
+        @io.swagger.annotations.ApiResponse(code = 200, message = "All available fido metadata for a user."),
         
         @io.swagger.annotations.ApiResponse(code = 400, message = "Bad Request"),
         
         @io.swagger.annotations.ApiResponse(code = 401, message = "Unauthorized"),
         
-        @io.swagger.annotations.ApiResponse(code = 409, message = "Conflict"),
+        @io.swagger.annotations.ApiResponse(code = 403, message = "Resource Forbidden"),
         
         @io.swagger.annotations.ApiResponse(code = 500, message = "Server Error") })
 
-    public Response rootGet(@ApiParam(value = "This represents the username",required=true) @QueryParam("username")  String username)
+    public Response rootGet()
     {
-    return delegate.rootGet(username);
+    return delegate.rootGet();
     }
 }
 

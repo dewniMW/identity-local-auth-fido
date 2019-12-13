@@ -13,6 +13,6 @@ import org.apache.cxf.jaxrs.ext.multipart.Attachment;
 import javax.ws.rs.core.Response;
 
 public abstract class StartRegistrationApiService {
-    public abstract Response startRegistrationGet(String appId);
+    public abstract Response startRegistrationPost(String appId);
 }
 

@@ -20,6 +20,9 @@ package org.wso2.carbon.identity.application.authenticator.fido2.endpoint.common
 
 import org.wso2.carbon.identity.application.authenticator.fido2.endpoint.dto.ErrorDTO;
 
+/**
+ * This class includes the utility methods for fido2 endpoint.
+ */
 public class Util {
 
     /**
@@ -29,7 +32,7 @@ public class Util {
      * @param data  Variable arguments to be passed with the error description.
      * @return A generic errorDTO with the specified details.
      */
-    public static ErrorDTO getErrorDTO(Constants.ErrorMessages error, String... data) {
+    public static ErrorDTO getErrorDTO(FIDO2Constants.ErrorMessages error, String... data) {
 
         ErrorDTO errorDTO = new ErrorDTO();
         errorDTO.setCode(error.getCode());
@@ -41,5 +44,4 @@ public class Util {
         errorDTO.setMessage(error.getMessage());
         return errorDTO;
     }
-
 }

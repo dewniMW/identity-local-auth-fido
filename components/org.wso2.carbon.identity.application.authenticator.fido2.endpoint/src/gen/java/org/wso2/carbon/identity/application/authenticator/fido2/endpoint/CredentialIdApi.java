@@ -29,13 +29,15 @@ public class CredentialIdApi  {
     
     @Consumes({ "application/json" })
     @Produces({ "application/json" })
-    @io.swagger.annotations.ApiOperation(value = "Deregister devices by username and credentialId\n", notes = "This API is used to deregister devices by username and credentialId.\n\n<b>Permission required:</b>\n * /permission/admin/login\n", response = void.class)
+    @io.swagger.annotations.ApiOperation(value = "Deregister devices by username and credentialId.\n", notes = "This API is used to deregister devices by username and credentialId.\n\n<b>Permission required:</b>\n * /permission/admin/login\n", response = void.class)
     @io.swagger.annotations.ApiResponses(value = { 
-        @io.swagger.annotations.ApiResponse(code = 200, message = "OK"),
+        @io.swagger.annotations.ApiResponse(code = 204, message = "No Content"),
         
         @io.swagger.annotations.ApiResponse(code = 400, message = "Bad Request"),
         
         @io.swagger.annotations.ApiResponse(code = 401, message = "Unauthorized"),
+        
+        @io.swagger.annotations.ApiResponse(code = 403, message = "Resource Forbidden"),
         
         @io.swagger.annotations.ApiResponse(code = 404, message = "Not Found"),
         

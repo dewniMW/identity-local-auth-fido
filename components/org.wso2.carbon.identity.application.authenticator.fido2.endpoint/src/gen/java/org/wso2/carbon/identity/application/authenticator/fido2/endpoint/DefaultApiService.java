@@ -13,6 +13,6 @@ import org.apache.cxf.jaxrs.ext.multipart.Attachment;
 import javax.ws.rs.core.Response;
 
 public abstract class DefaultApiService {
-    public abstract Response rootGet(String username);
+    public abstract Response rootGet();
 }
 
